@@ -91,7 +91,18 @@ export function LeadFormModal() {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && close()}>
-      <DialogContent className="w-[540px] max-w-[calc(100vw-1.5rem)] gap-0 p-0">
+      <DialogContent
+        className="w-[540px] max-w-[calc(100vw-1.5rem)] gap-0 p-0"
+        onInteractOutside={(event) => {
+          // O dropdown do Select é renderizado num portal fora da árvore do
+          // Dialog. Sem isto, clicar numa área do dropdown que não é um item
+          // conta como "clique fora" e fecha o modal, perdendo os dados.
+          const target = event.detail.originalEvent.target as HTMLElement | null;
+          if (target?.closest("[data-radix-popper-content-wrapper]")) {
+            event.preventDefault();
+          }
+        }}
+      >
         {open && (
           <LeadForm
             key={editing ? `edit-${editing.id}` : "new"}

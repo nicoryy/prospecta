@@ -10,6 +10,16 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - **MINOR** — novas funcionalidades retrocompatíveis.
 - **PATCH** — correções retrocompatíveis e ajustes menores.
 
+## [1.5.1] - 2026-06-23
+
+### Corrigido
+
+- **Modal de lead fechava ao clicar no dropdown**: clicar numa área do menu de
+  Origem/Serviço que não fosse um item era interpretado como "clique fora" e
+  fechava o modal, perdendo os dados preenchidos. Agora o Dialog ignora as
+  interações vindas do dropdown (portal do Radix). Verificado com teste de clique
+  automatizado (CDP).
+
 ## [1.5.0] - 2026-06-23
 
 ### Adicionado
