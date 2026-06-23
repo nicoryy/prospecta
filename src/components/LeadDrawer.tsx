@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { LeadFilesTab } from "@/components/LeadFilesTab";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -298,45 +299,7 @@ export function LeadDrawer() {
           )}
 
           {state.drawerTab === "arquivos" && (
-            <>
-              <div className="mb-[18px] rounded-xl border-2 border-dashed border-[#e0e0e8] p-[26px] text-center">
-                <div className="text-[13px] text-[#8c8c98]">
-                  Arraste arquivos aqui ou{" "}
-                  <span className="font-semibold text-brand">selecione</span>
-                </div>
-                <div className="mt-1 text-[11.5px] text-[#b0b0bc]">
-                  Propostas, contratos, escopos, PDFs, capturas
-                </div>
-              </div>
-              <div className="flex flex-col gap-2">
-                {lead.arquivos.map((af, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-[11px] rounded-[10px] border border-border px-[13px] py-[11px]"
-                  >
-                    <div
-                      className="flex h-[38px] w-8 flex-none items-end justify-center rounded-[5px] pb-[5px]"
-                      style={{ background: af.bg }}
-                    >
-                      <span className="text-[8px] font-bold tracking-[0.3px] text-white">
-                        {af.ext}
-                      </span>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate text-[13px] font-semibold text-[#2c2c38]">
-                        {af.nome}
-                      </div>
-                      <div className="text-[11px] text-[#9a9aa8]">{af.meta}</div>
-                    </div>
-                  </div>
-                ))}
-                {lead.arquivosEmpty && (
-                  <div className="p-2 text-center text-[12.5px] text-[#a0a0ac]">
-                    Nenhum arquivo anexado.
-                  </div>
-                )}
-              </div>
-            </>
+            <LeadFilesTab leadId={lead.id} arquivos={selectedLead.arquivos} />
           )}
         </div>
       </aside>

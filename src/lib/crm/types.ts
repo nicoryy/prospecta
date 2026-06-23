@@ -27,10 +27,14 @@ export interface TimelineEvent {
 }
 
 export interface Arquivo {
+  /** Stored id on the file server (the on-disk filename). Empty for demo files. */
+  id: string;
   nome: string;
   ext: string;
   meta: string;
   bg: string;
+  /** Download/preview URL served by the local file server. Empty for demo files. */
+  url: string;
 }
 
 export interface Lead {

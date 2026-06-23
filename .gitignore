@@ -15,6 +15,10 @@ dist-ssr
 # TypeScript incremental build info
 *.tsbuildinfo
 
+# Uploaded attachments (served by the local file server)
+/FILES/*
+!/FILES/.gitkeep
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

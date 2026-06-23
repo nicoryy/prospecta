@@ -145,19 +145,23 @@ export function seed(): Lead[] {
     )
       ? [
           {
+            id: "",
             nome: "Proposta_" + slug + ".pdf",
             ext: "PDF",
             meta: "1,2 MB · " + fmt(daysAgo((parado || 0) + 1)),
             bg: "#f43f5e",
+            url: "",
           },
         ]
       : [];
     if (status === "fechado")
       arquivos.push({
+        id: "",
         nome: "Contrato_" + slug + ".pdf",
         ext: "PDF",
         meta: "420 KB · " + fmt(daysAgo(parado || 0)),
         bg: "#10b981",
+        url: "",
       });
 
     const cleanSlug = slug.replace(/[^a-z]/g, "");

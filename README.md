@@ -41,14 +41,36 @@ implementada em React com componentes [shadcn/ui](https://ui.shadcn.com).
 
 ## Como rodar
 
+### Uso na rede (recomendado) — um único comando
+
 ```bash
 npm install
-npm run dev      # servidor de desenvolvimento (http://localhost:5173)
-npm run build    # type-check + build de produção
-npm run preview  # serve o build de produção
+npm start        # faz o build e sobe o servidor local em http://localhost:8787
 ```
 
+O `npm start` gera o build e inicia o **servidor de arquivos** (`server/index.mjs`,
+Node puro, sem dependências). Ele serve o app e recebe os anexos, acessível por
+qualquer aparelho da rede em `http://<ip-da-máquina>:8787` (o IP é exibido no
+console ao iniciar). Porta configurável via `PORT`.
+
+### Desenvolvimento (hot reload)
+
+```bash
+npm run serve    # terminal 1: servidor de arquivos (porta 8787)
+npm run dev      # terminal 2: Vite com hot reload (porta 5173)
+```
+
+O Vite encaminha `/api` e `/files` para o servidor de arquivos, então os uploads
+funcionam também em dev. Use `npm run dev` sozinho se não precisar de anexos.
+
 Atalhos de navegação por hash: `#kanban`, `#tarefas` (padrão: dashboard).
+
+## Anexos (pasta FILES/)
+
+Os arquivos anexados aos leads são gravados em `FILES/<id-do-lead>/` pelo servidor
+local — **sem backend na nuvem, sem custo**. Os metadados (nome, tamanho, link)
+ficam junto do lead no `localStorage`; os bytes ficam em disco em `FILES/`. O
+conteúdo de `FILES/` é ignorado pelo git. Limite por arquivo: 50 MB (`MAX_UPLOAD_MB`).
 
 ## Estrutura
 
@@ -66,14 +88,22 @@ src/
       date.ts              # helpers de data e formatação (R$)
       seed.ts              # dados de exemplo + timelines
       derive.ts            # seletores puros (KPIs, funil, kanban, tarefas...)
+      storage.ts           # persistência em localStorage
+      csv.ts               # exportação CSV
+      files.ts             # cliente de upload/exclusão de anexos
   components/
     Sidebar.tsx            # navegação + mini-pipeline + perfil
-    Topbar.tsx             # título, busca e "Novo lead"
+    Topbar.tsx             # título, busca, exportar, menu de dados, "Novo lead"
     LeadDrawer.tsx         # painel lateral do lead
-    AddLeadModal.tsx       # cadastro de lead
+    LeadFormModal.tsx      # cadastro/edição de lead
+    LeadFilesTab.tsx       # upload e listagem de anexos
+    EmptyState.tsx         # tela inicial sem leads
     views/
       Dashboard.tsx
       Kanban.tsx
       Tarefas.tsx
     ui/                    # primitivos shadcn/ui
+server/
+  index.mjs                # servidor local (estático + API de anexos em FILES/)
+FILES/                     # anexos gravados em disco (ignorado pelo git)
 ```

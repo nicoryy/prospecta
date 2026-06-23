@@ -10,6 +10,7 @@ import { STATUS_BY_KEY, TODAY } from "@/lib/crm/constants";
 import { seed } from "@/lib/crm/seed";
 import { loadState, saveState } from "@/lib/crm/storage";
 import type {
+  Arquivo,
   DrawerTab,
   Lead,
   NewLeadForm,
@@ -57,7 +58,9 @@ type Action =
   | { type: "updateLead"; id: number; patch: LeadPatch }
   | { type: "deleteLead"; id: number }
   | { type: "clearAll" }
-  | { type: "loadSample" };
+  | { type: "loadSample" }
+  | { type: "addArquivo"; id: number; arquivo: Arquivo }
+  | { type: "removeArquivo"; id: number; arquivoId: string };
 
 function initialView(): View {
   const hash = typeof window !== "undefined" ? window.location.hash.slice(1) : "";
@@ -252,6 +255,22 @@ function reducer(s: State, a: Action): State {
         activeTag: null,
         search: "",
       };
+    case "addArquivo":
+      return {
+        ...s,
+        leads: s.leads.map((l) =>
+          l.id !== a.id ? l : { ...l, arquivos: [a.arquivo, ...l.arquivos] },
+        ),
+      };
+    case "removeArquivo":
+      return {
+        ...s,
+        leads: s.leads.map((l) =>
+          l.id !== a.id
+            ? l
+            : { ...l, arquivos: l.arquivos.filter((af) => af.id !== a.arquivoId) },
+        ),
+      };
     default:
       return s;
   }
@@ -284,6 +303,8 @@ interface CrmContextValue {
     deleteLead: (id: number) => void;
     clearAll: () => void;
     loadSample: () => void;
+    addArquivo: (id: number, arquivo: Arquivo) => void;
+    removeArquivo: (id: number, arquivoId: string) => void;
   };
 }
 
@@ -328,6 +349,9 @@ export function CrmProvider({ children }: { children: ReactNode }) {
         deleteLead: (id) => dispatch({ type: "deleteLead", id }),
         clearAll: () => dispatch({ type: "clearAll" }),
         loadSample: () => dispatch({ type: "loadSample" }),
+        addArquivo: (id, arquivo) => dispatch({ type: "addArquivo", id, arquivo }),
+        removeArquivo: (id, arquivoId) =>
+          dispatch({ type: "removeArquivo", id, arquivoId }),
       },
     };
   }, [state]);

@@ -10,6 +10,25 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - **MINOR** — novas funcionalidades retrocompatíveis.
 - **PATCH** — correções retrocompatíveis e ajustes menores.
 
+## [1.4.0] - 2026-06-23
+
+### Adicionado
+
+- **Servidor local de arquivos** (`server/index.mjs`, Node puro, sem dependências):
+  serve o app (build) e expõe uma API mínima de anexos, gravando os arquivos em
+  `FILES/<id-do-lead>/`. Acessível na rede local; custo zero.
+  - `npm start` faz o build e sobe o servidor (porta 8787, configurável via `PORT`).
+  - `npm run serve` sobe só o servidor (para usar junto do `npm run dev`).
+- **Upload de anexos** na aba "Arquivos" do lead: arraste-e-solte ou seleção,
+  múltiplos arquivos, com download/preview e exclusão. Limite de 50 MB por arquivo.
+- Proxy do Vite (`/api`, `/files`) e `server.host` para uso em rede no dev.
+
+### Alterado
+
+- Tipo `Arquivo` ganhou `id` e `url` (referência ao arquivo no servidor).
+
+[1.4.0]: https://semver.org/
+
 ## [1.3.0] - 2026-06-23
 
 ### Alterado

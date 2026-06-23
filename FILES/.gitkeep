@@ -1,0 +1,3 @@
+# Os anexos enviados pelos leads são gravados aqui pelo servidor local
+# (server/index.mjs), em subpastas por id de lead: FILES/<leadId>/<arquivo>.
+# O conteúdo é ignorado pelo git (veja .gitignore); apenas esta pasta é mantida.
