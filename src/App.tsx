@@ -7,6 +7,7 @@ import { Kanban } from "@/components/views/Kanban";
 import { Tarefas } from "@/components/views/Tarefas";
 import { LeadDrawer } from "@/components/LeadDrawer";
 import { LeadFormModal } from "@/components/LeadFormModal";
+import { EmptyState } from "@/components/EmptyState";
 import { buildTasks } from "@/lib/crm/derive";
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
     () => buildTasks(state.leads, state.done).badge,
     [state.leads, state.done],
   );
+  const isEmpty = state.leads.length === 0;
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-background text-foreground">
@@ -23,9 +25,15 @@ export default function App() {
       <main className="flex min-w-0 flex-1 flex-col">
         <Topbar />
         <div className="min-h-0 flex-1 overflow-auto">
-          {state.view === "dashboard" && <Dashboard />}
-          {state.view === "kanban" && <Kanban />}
-          {state.view === "tarefas" && <Tarefas />}
+          {isEmpty ? (
+            <EmptyState />
+          ) : (
+            <>
+              {state.view === "dashboard" && <Dashboard />}
+              {state.view === "kanban" && <Kanban />}
+              {state.view === "tarefas" && <Tarefas />}
+            </>
+          )}
         </div>
       </main>
 

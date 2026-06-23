@@ -3,8 +3,11 @@ import type { Lead } from "./types";
 /**
  * Storage schema version. Bump this when the persisted shape changes in a way
  * that should invalidate previously stored data (e.g. a deliberate reset).
+ *
+ * v2 (1.3.0): "começar do zero" — invalidates the seeded demo data persisted
+ * under v1 so the app starts empty.
  */
-export const STORAGE_SCHEMA = 1;
+export const STORAGE_SCHEMA = 2;
 const KEY = `prospecta:state:v${STORAGE_SCHEMA}`;
 
 export interface PersistedState {

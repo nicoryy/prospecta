@@ -31,6 +31,9 @@ implementada em React com componentes [shadcn/ui](https://ui.shadcn.com).
 - **Menu de dados** (⋮ na barra superior) — carregar dados de exemplo ou limpar
   tudo para começar do zero.
 
+> O app **começa vazio** (sem leads). Use **Novo lead** ou o menu de dados →
+> **Carregar dados de exemplo** para popular com os 30 leads fictícios.
+>
 > Os dados residem no navegador (sem backend), persistidos em `localStorage`
 > (chave `prospecta:state:vN`). A "data de hoje" está fixada em `2026-06-23` para
 > manter as datas relativas dos dados de exemplo coerentes — veja

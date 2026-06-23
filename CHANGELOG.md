@@ -10,6 +10,24 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - **MINOR** — novas funcionalidades retrocompatíveis.
 - **PATCH** — correções retrocompatíveis e ajustes menores.
 
+## [1.3.0] - 2026-06-23
+
+### Alterado
+
+- **Começar do zero**: o app passa a iniciar **sem leads** por padrão (antes
+  carregava 30 leads de exemplo). Para explorar com dados fictícios, use o menu
+  de dados → "Carregar dados de exemplo".
+- **Reset de armazenamento**: a versão do schema do `localStorage` foi para `v2`
+  (`prospecta:state:v2`), descartando os dados de exemplo persistidos na `v1` —
+  garante o início do zero ao recarregar.
+
+### Adicionado
+
+- **Empty state**: tela de boas-vindas ("Comece a prospectar") quando não há
+  leads, com atalhos para cadastrar ou carregar exemplos.
+
+[1.3.0]: https://semver.org/
+
 ## [1.2.0] - 2026-06-23
 
 ### Adicionado

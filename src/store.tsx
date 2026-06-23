@@ -68,7 +68,9 @@ function initialState(): State {
   const persisted = loadState();
   return {
     view: initialView(),
-    leads: persisted?.leads ?? seed(),
+    // Começa do zero: sem dados de exemplo por padrão. Use o menu de dados
+    // ("Carregar dados de exemplo") para popular com os leads fictícios.
+    leads: persisted?.leads ?? [],
     search: "",
     activeTag: null,
     selectedId: null,
