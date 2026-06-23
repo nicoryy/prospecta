@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   Download,
+  Menu,
   MoreVertical,
   Plus,
   Search,
@@ -45,33 +46,46 @@ const TITLES: Record<string, { title: string; subtitle: string }> = {
   },
 };
 
-export function Topbar() {
+export function Topbar({ onOpenNav }: { onOpenNav: () => void }) {
   const { state, actions } = useCrm();
   const { title, subtitle } = TITLES[state.view];
   const [confirmClear, setConfirmClear] = useState(false);
   const hasLeads = state.leads.length > 0;
 
   return (
-    <header className="flex h-[60px] flex-none items-center gap-4 border-b border-border bg-card px-6">
-      <div className="text-[17px] font-bold tracking-[-0.3px]">{title}</div>
-      <div className="text-[12.5px] text-muted-foreground">{subtitle}</div>
+    <header className="flex h-[60px] flex-none items-center gap-2 border-b border-border bg-card px-3 sm:gap-4 sm:px-6">
+      <button
+        onClick={onOpenNav}
+        className="flex h-9 w-9 flex-none items-center justify-center rounded-lg text-foreground hover:bg-secondary md:hidden"
+        aria-label="Abrir menu"
+      >
+        <Menu className="h-5 w-5" />
+      </button>
 
-      <div className="ml-auto flex items-center gap-2.5">
-        <div className="flex w-[260px] items-center gap-2 rounded-[9px] border border-[#e6e6ec] bg-[#f2f2f5] px-[11px] py-[7px]">
+      <div className="hidden text-[17px] font-bold tracking-[-0.3px] sm:block">
+        {title}
+      </div>
+      <div className="hidden text-[12.5px] text-muted-foreground lg:block">
+        {subtitle}
+      </div>
+
+      <div className="contents">
+        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-[9px] border border-[#e6e6ec] bg-[#f2f2f5] px-[11px] py-[7px] sm:ml-auto sm:w-[260px] sm:flex-none">
           <Search className="h-[15px] w-[15px] flex-none text-[#9a9aa8]" strokeWidth={1.8} />
           <input
             value={state.search}
             onChange={(e) => actions.setSearch(e.target.value)}
-            placeholder="Buscar empresa, contato, cidade…"
+            placeholder="Buscar…"
             className="w-full border-none bg-transparent text-[13px] text-foreground outline-none placeholder:text-[#9a9aa8]"
           />
         </div>
+
         <Button
           variant="outline"
           onClick={() => downloadLeadsCsv(state.leads)}
           disabled={!hasLeads}
           title="Exportar todos os leads em CSV"
-          className="h-9 gap-[7px] px-3 text-[13px]"
+          className="hidden h-9 gap-[7px] px-3 text-[13px] md:inline-flex"
         >
           <Download className="h-[14px] w-[14px]" strokeWidth={2} />
           Exportar
@@ -82,7 +96,7 @@ export function Topbar() {
             <Button
               variant="outline"
               size="icon"
-              className="h-9 w-9"
+              className="h-9 w-9 flex-none"
               title="Mais ações"
               aria-label="Mais ações"
             >
@@ -90,6 +104,15 @@ export function Topbar() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              className="md:hidden"
+              disabled={!hasLeads}
+              onSelect={() => downloadLeadsCsv(state.leads)}
+            >
+              <Download className="text-muted-foreground" />
+              Exportar CSV
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="md:hidden" />
             <DropdownMenuItem onSelect={() => actions.loadSample()}>
               <Sparkles className="text-muted-foreground" />
               Carregar dados de exemplo
@@ -109,9 +132,12 @@ export function Topbar() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Button onClick={actions.openAdd} className="h-9 gap-[7px] px-3.5 text-[13px]">
-          <Plus className="h-[13px] w-[13px]" strokeWidth={2.5} />
-          Novo lead
+        <Button
+          onClick={actions.openAdd}
+          className="h-9 flex-none gap-[7px] px-2.5 text-[13px] sm:px-3.5"
+        >
+          <Plus className="h-[15px] w-[15px] sm:h-[13px] sm:w-[13px]" strokeWidth={2.5} />
+          <span className="hidden sm:inline">Novo lead</span>
         </Button>
       </div>
 

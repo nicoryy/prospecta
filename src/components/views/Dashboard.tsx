@@ -36,31 +36,31 @@ export function Dashboard() {
   }, [leads, state.done]);
 
   return (
-    <div className="max-w-[1280px] px-7 pb-10 pt-6">
+    <div className="max-w-[1280px] px-4 pb-10 pt-6 sm:px-7">
       {/* hero row */}
       <div className="mb-[22px] flex flex-wrap gap-4">
-        <div className="min-w-[320px] flex-1 rounded-2xl bg-[linear-gradient(120deg,#6d4aff,#8b6bff)] px-6 py-[22px] text-white">
+        <div className="min-w-[260px] flex-1 rounded-2xl bg-[linear-gradient(120deg,#6d4aff,#8b6bff)] px-6 py-[22px] text-white">
           <div className="text-[13px] font-medium opacity-85">
             {saudacao()}, Rafael
           </div>
           <div className="mb-4 mt-1 text-[21px] font-bold tracking-[-0.3px]">
             Seu resumo de hoje
           </div>
-          <div className="flex flex-wrap gap-[26px]">
+          <div className="grid grid-cols-3 gap-3 sm:gap-[26px]">
             <ResumoStat value={model.resumoHoje} label="contatos para hoje" />
             <ResumoStat value={model.resumoPropostas} label="propostas aguardando" />
             <ResumoStat value={model.resumoReunioes} label="reuniões agendadas" />
           </div>
         </div>
 
-        <Card className="flex min-w-[320px] flex-1 flex-col justify-center rounded-2xl px-[22px] py-5">
+        <Card className="flex min-w-[260px] flex-1 flex-col justify-center rounded-2xl px-[22px] py-5">
           <div className="text-[12.5px] font-semibold uppercase tracking-[0.5px] text-muted-foreground">
             Valor potencial do pipeline
           </div>
           <div className="my-1 mt-1.5 text-[34px] font-bold tracking-[-0.8px] tabular-nums">
             {model.pipeline.totalFmt}
           </div>
-          <div className="mt-2 flex gap-[18px] text-[12.5px] text-[#6c6c7c]">
+          <div className="mt-2 flex flex-wrap gap-x-[18px] gap-y-1 text-[12.5px] text-[#6c6c7c]">
             <span>
               Negociação <b className="text-foreground">{model.pipeline.negFmt}</b>
             </span>

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useCrm } from "@/store";
 import { Sidebar } from "@/components/Sidebar";
 import { Topbar } from "@/components/Topbar";
@@ -17,14 +17,19 @@ export default function App() {
     [state.leads, state.done],
   );
   const isEmpty = state.leads.length === 0;
+  const [navOpen, setNavOpen] = useState(false);
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-background text-foreground">
-      <Sidebar tasksBadge={tasksBadge} />
+    <div className="flex h-dvh w-full overflow-hidden bg-background text-foreground">
+      <Sidebar
+        tasksBadge={tasksBadge}
+        mobileOpen={navOpen}
+        onClose={() => setNavOpen(false)}
+      />
 
       <main className="flex min-w-0 flex-1 flex-col">
-        <Topbar />
-        <div className="min-h-0 flex-1 overflow-auto">
+        <Topbar onOpenNav={() => setNavOpen(true)} />
+        <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
           {isEmpty ? (
             <EmptyState />
           ) : (

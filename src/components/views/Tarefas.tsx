@@ -17,7 +17,7 @@ export function Tarefas() {
   const followups = useMemo(() => buildFollowups(state.leads), [state.leads]);
 
   return (
-    <div className="max-w-[880px] px-7 pb-10 pt-6">
+    <div className="max-w-[880px] px-4 pb-10 pt-6 sm:px-7">
       <Card className="mb-[18px] rounded-[14px] px-[22px] py-5">
         <div className="flex items-center gap-[9px]">
           <div className="text-[15px] font-bold">Agenda comercial</div>

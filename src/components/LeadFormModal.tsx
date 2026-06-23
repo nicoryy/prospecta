@@ -91,7 +91,7 @@ export function LeadFormModal() {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && close()}>
-      <DialogContent className="w-[540px] max-w-full gap-0 p-0">
+      <DialogContent className="w-[540px] max-w-[calc(100vw-1.5rem)] gap-0 p-0">
         {open && (
           <LeadForm
             key={editing ? `edit-${editing.id}` : "new"}
@@ -159,12 +159,12 @@ function LeadForm({
 
   return (
     <>
-      <DialogHeader className="flex flex-row items-center border-b border-border px-6 py-5">
+      <DialogHeader className="flex flex-row items-center border-b border-border px-4 py-5 sm:px-6">
         <DialogTitle>{isEdit ? "Editar lead" : "Novo lead"}</DialogTitle>
       </DialogHeader>
 
-      <div className="grid max-h-[64vh] grid-cols-2 gap-3.5 overflow-y-auto px-6 py-[22px]">
-        <Field label="Empresa *" className="col-span-2">
+      <div className="grid max-h-[64vh] grid-cols-1 gap-3.5 overflow-y-auto px-4 py-[22px] sm:grid-cols-2 sm:px-6">
+        <Field label="Empresa *" className="sm:col-span-2">
           <Input
             value={form.empresa}
             onChange={(e) => set("empresa", e.target.value)}
@@ -293,7 +293,7 @@ function LeadForm({
         )}
       </div>
 
-      <div className="flex justify-end gap-2.5 border-t border-border px-6 py-4">
+      <div className="flex justify-end gap-2.5 border-t border-border px-4 py-4 sm:px-6">
         <Button variant="outline" onClick={onCancel}>
           Cancelar
         </Button>

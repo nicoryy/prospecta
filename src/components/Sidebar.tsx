@@ -49,7 +49,6 @@ function TasksIcon() {
 }
 
 interface NavItemProps {
-  view: View;
   label: string;
   icon: React.ReactNode;
   active: boolean;
@@ -79,12 +78,23 @@ function NavItem({ label, icon, active, badge, onClick }: NavItemProps) {
   );
 }
 
-export function Sidebar({ tasksBadge }: { tasksBadge: number }) {
+function SidebarInner({
+  tasksBadge,
+  onNavigate,
+}: {
+  tasksBadge: number;
+  onNavigate?: () => void;
+}) {
   const { state, actions } = useCrm();
   const pipe = useMemo(() => pipeMini(state.leads), [state.leads]);
 
+  const go = (view: View) => {
+    actions.setView(view);
+    onNavigate?.();
+  };
+
   return (
-    <aside className="flex w-[236px] flex-none flex-col bg-brand-sidebar px-3.5 py-[18px] text-[#cfcfd9]">
+    <div className="flex h-full flex-col px-3.5 py-[18px] text-[#cfcfd9]">
       <div className="flex items-center gap-2.5 px-2 pb-[22px] pt-1.5">
         <LogoMark />
         <div className="leading-[1.1]">
@@ -97,26 +107,23 @@ export function Sidebar({ tasksBadge }: { tasksBadge: number }) {
 
       <nav className="flex flex-col gap-[3px]">
         <NavItem
-          view="dashboard"
           label="Dashboard"
           icon={<DashIcon />}
           active={state.view === "dashboard"}
-          onClick={() => actions.setView("dashboard")}
+          onClick={() => go("dashboard")}
         />
         <NavItem
-          view="kanban"
           label="Funil de leads"
           icon={<KanbanIcon />}
           active={state.view === "kanban"}
-          onClick={() => actions.setView("kanban")}
+          onClick={() => go("kanban")}
         />
         <NavItem
-          view="tarefas"
           label="Tarefas do dia"
           icon={<TasksIcon />}
           active={state.view === "tarefas"}
           badge={tasksBadge}
-          onClick={() => actions.setView("tarefas")}
+          onClick={() => go("tarefas")}
         />
       </nav>
 
@@ -149,6 +156,50 @@ export function Sidebar({ tasksBadge }: { tasksBadge: number }) {
           <div className="text-[11px] text-[#6c6c7c]">Dev freelancer</div>
         </div>
       </div>
-    </aside>
+    </div>
+  );
+}
+
+export function Sidebar({
+  tasksBadge,
+  mobileOpen,
+  onClose,
+}: {
+  tasksBadge: number;
+  mobileOpen: boolean;
+  onClose: () => void;
+}) {
+  return (
+    <>
+      {/* Desktop: fixa, no fluxo */}
+      <aside className="hidden w-[236px] flex-none bg-brand-sidebar md:block">
+        <SidebarInner tasksBadge={tasksBadge} />
+      </aside>
+
+      {/* Mobile: off-canvas */}
+      <div
+        className={cn(
+          "fixed inset-0 z-50 md:hidden",
+          mobileOpen ? "pointer-events-auto" : "pointer-events-none",
+        )}
+        aria-hidden={!mobileOpen}
+      >
+        <div
+          onClick={onClose}
+          className={cn(
+            "absolute inset-0 bg-[rgba(15,15,25,0.45)] transition-opacity duration-200",
+            mobileOpen ? "opacity-100" : "opacity-0",
+          )}
+        />
+        <aside
+          className={cn(
+            "absolute inset-y-0 left-0 w-[260px] max-w-[82vw] bg-brand-sidebar shadow-[12px_0_40px_rgba(15,15,25,0.3)] transition-transform duration-200",
+            mobileOpen ? "translate-x-0" : "-translate-x-full",
+          )}
+        >
+          <SidebarInner tasksBadge={tasksBadge} onNavigate={onClose} />
+        </aside>
+      </div>
+    </>
   );
 }

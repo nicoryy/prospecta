@@ -53,7 +53,7 @@ export function LeadDrawer() {
       />
       <aside className="fixed bottom-0 right-0 top-0 z-50 flex w-[520px] max-w-[94vw] animate-drawerIn flex-col bg-card shadow-[-12px_0_40px_rgba(15,15,25,0.18)]">
         {/* header */}
-        <div className="flex-none border-b border-border px-6 pb-[18px] pt-5">
+        <div className="flex-none border-b border-border px-4 pb-[18px] pt-5 sm:px-6">
           <div className="flex items-start gap-3">
             <div className="min-w-0 flex-1">
               <span
@@ -161,7 +161,7 @@ export function LeadDrawer() {
         </div>
 
         {/* tabs */}
-        <div className="flex flex-none gap-0.5 border-b border-border px-6">
+        <div className="flex flex-none gap-0.5 border-b border-border px-4 sm:px-6">
           {TABS.map((tb) => {
             const on = state.drawerTab === tb.key;
             return (
@@ -181,7 +181,7 @@ export function LeadDrawer() {
           })}
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-6 pt-[18px]">
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6 pt-[18px] sm:px-6">
           {state.drawerTab === "timeline" && (
             <>
               <div className="mb-[18px] rounded-[11px] border border-[#eeeef2] bg-[#f8f8fb] p-3">

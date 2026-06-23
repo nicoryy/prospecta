@@ -21,7 +21,7 @@ export function Kanban() {
   return (
     <div className="flex h-full flex-col">
       {/* filter bar */}
-      <div className="flex flex-none flex-wrap items-center gap-[9px] border-b border-border bg-card px-6 py-3.5">
+      <div className="flex flex-none flex-wrap items-center gap-[9px] border-b border-border bg-card px-4 py-3.5 sm:px-6">
         <span className="mr-0.5 text-[12px] font-semibold text-muted-foreground">
           Filtrar:
         </span>
@@ -48,7 +48,7 @@ export function Kanban() {
       </div>
 
       {/* board */}
-      <div className="min-h-0 flex-1 overflow-x-auto overflow-y-hidden px-6 pb-5 pt-4">
+      <div className="min-h-0 flex-1 overflow-x-auto overflow-y-hidden px-4 pb-5 pt-4 sm:px-6">
         <div className="flex h-full min-w-max gap-3.5">
           {columns.map((col) => {
             const over = state.dragOverCol === col.key;

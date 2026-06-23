@@ -10,6 +10,19 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - **MINOR** — novas funcionalidades retrocompatíveis.
 - **PATCH** — correções retrocompatíveis e ajustes menores.
 
+## [1.5.0] - 2026-06-23
+
+### Adicionado
+
+- **Responsividade** para telas menores (celulares/tablets):
+  - Barra lateral vira menu deslizante (off-canvas) com botão ☰ e backdrop.
+  - Barra superior condensada: busca flexível, "Novo lead" só com ícone e
+    "Exportar CSV" disponível no menu (⋮).
+  - Paddings, grids do dashboard/tarefas, modais e o drawer adaptados a telas
+    estreitas; altura usa `dvh` (considera a barra do navegador mobile).
+
+[1.5.0]: https://semver.org/
+
 ## [1.4.0] - 2026-06-23
 
 ### Adicionado

@@ -7,7 +7,7 @@ export function EmptyState() {
 
   return (
     <div className="flex h-full items-center justify-center p-6">
-      <div className="w-full max-w-[420px] rounded-2xl border border-border bg-card px-8 py-10 text-center">
+      <div className="w-full max-w-[420px] rounded-2xl border border-border bg-card px-6 py-10 text-center sm:px-8">
         <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-soft">
           <svg width="26" height="26" viewBox="0 0 16 16">
             <rect x="1" y="1" width="6" height="6" rx="1.5" fill="#6d4aff" />
@@ -24,7 +24,7 @@ export function EmptyState() {
           acompanhar contatos e negociações — ou carregue dados de exemplo para
           explorar a ferramenta.
         </p>
-        <div className="mt-6 flex items-center justify-center gap-2.5">
+        <div className="mt-6 flex flex-col items-stretch justify-center gap-2.5 sm:flex-row sm:items-center">
           <Button onClick={actions.openAdd} className="gap-[7px]">
             <Plus className="h-[14px] w-[14px]" strokeWidth={2.5} />
             Novo lead

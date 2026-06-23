@@ -30,6 +30,8 @@ implementada em React com componentes [shadcn/ui](https://ui.shadcn.com).
 - **Exportação CSV** — baixe todos os leads em um arquivo `.csv`.
 - **Menu de dados** (⋮ na barra superior) — carregar dados de exemplo ou limpar
   tudo para começar do zero.
+- **Responsivo** — em telas pequenas a barra lateral vira um menu deslizante
+  (botão ☰) e o layout se adapta para celulares e tablets.
 
 > O app **começa vazio** (sem leads). Use **Novo lead** ou o menu de dados →
 > **Carregar dados de exemplo** para popular com os 30 leads fictícios.
