@@ -10,6 +10,17 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - **MINOR** — novas funcionalidades retrocompatíveis.
 - **PATCH** — correções retrocompatíveis e ajustes menores.
 
+## [1.1.0] - 2026-06-23
+
+### Adicionado
+
+- **Persistência em localStorage**: os leads e as tarefas concluídas são salvos
+  automaticamente a cada alteração e recarregados ao abrir o app (chave versionada
+  `prospecta:state:v1`).
+- **Exportação CSV**: botão "Exportar" na barra superior gera um arquivo
+  `prospecta-leads-AAAA-MM-DD.csv` com todos os leads (UTF-8 com BOM e escape
+  RFC 4180, compatível com Excel/Sheets).
+
 ## [1.0.0] - 2026-06-23
 
 ### Adicionado

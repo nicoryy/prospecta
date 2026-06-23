@@ -1,12 +1,14 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useReducer,
   type ReactNode,
 } from "react";
 import { STATUS_BY_KEY, TODAY } from "@/lib/crm/constants";
 import { seed } from "@/lib/crm/seed";
+import { loadState, saveState } from "@/lib/crm/storage";
 import type {
   DrawerTab,
   Lead,
@@ -54,9 +56,10 @@ function initialView(): View {
 }
 
 function initialState(): State {
+  const persisted = loadState();
   return {
     view: initialView(),
-    leads: seed(),
+    leads: persisted?.leads ?? seed(),
     search: "",
     activeTag: null,
     selectedId: null,
@@ -64,7 +67,7 @@ function initialState(): State {
     newTipo: "Ligação",
     draggingId: null,
     dragOverCol: null,
-    done: {},
+    done: persisted?.done ?? {},
     addOpen: false,
   };
 }
@@ -227,6 +230,11 @@ const CrmContext = createContext<CrmContextValue | null>(null);
 
 export function CrmProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, undefined, initialState);
+
+  // Persist the durable slice (leads + completed tasks) on every change.
+  useEffect(() => {
+    saveState({ leads: state.leads, done: state.done });
+  }, [state.leads, state.done]);
 
   const value = useMemo<CrmContextValue>(() => {
     const selectedLead =

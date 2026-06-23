@@ -1,8 +1,9 @@
-import { Plus, Search } from "lucide-react";
+import { Download, Plus, Search } from "lucide-react";
 import { useCrm } from "@/store";
 import { Button } from "@/components/ui/button";
 import { fmt } from "@/lib/crm/date";
 import { TODAY } from "@/lib/crm/constants";
+import { downloadLeadsCsv } from "@/lib/crm/csv";
 
 const TITLES: Record<string, { title: string; subtitle: string }> = {
   dashboard: {
@@ -38,6 +39,16 @@ export function Topbar() {
             className="w-full border-none bg-transparent text-[13px] text-foreground outline-none placeholder:text-[#9a9aa8]"
           />
         </div>
+        <Button
+          variant="outline"
+          onClick={() => downloadLeadsCsv(state.leads)}
+          disabled={state.leads.length === 0}
+          title="Exportar todos os leads em CSV"
+          className="h-9 gap-[7px] px-3 text-[13px]"
+        >
+          <Download className="h-[14px] w-[14px]" strokeWidth={2} />
+          Exportar
+        </Button>
         <Button onClick={actions.openAdd} className="h-9 gap-[7px] px-3.5 text-[13px]">
           <Plus className="h-[13px] w-[13px]" strokeWidth={2.5} />
           Novo lead
