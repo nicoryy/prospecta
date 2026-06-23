@@ -10,6 +10,16 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - **MINOR** — novas funcionalidades retrocompatíveis.
 - **PATCH** — correções retrocompatíveis e ajustes menores.
 
+## [1.6.0] - 2026-06-23
+
+### Alterado
+
+- **"Novo lead" agora tem todos os campos** que "Editar lead" tinha: além de
+  empresa, contato, telefone, cidade, valor, origem e serviço, inclui cargo,
+  WhatsApp, e-mail, site, perfil, status, próxima ação e data. O formulário de
+  criação e o de edição passam a ser idênticos (com defaults sensatos no novo:
+  status "Não Contatado", próxima ação "Fazer primeiro contato", data de hoje).
+
 ## [1.5.1] - 2026-06-23
 
 ### Corrigido

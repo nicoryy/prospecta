@@ -15,30 +15,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ORIGENS, PERFIL, SERVICOS, STATUS } from "@/lib/crm/constants";
+import { ORIGENS, PERFIL, SERVICOS, STATUS, TODAY } from "@/lib/crm/constants";
 import type { Lead, NewLeadForm, StatusKey } from "@/lib/crm/types";
 
 const PERFIS = Object.keys(PERFIL);
 
-interface FormState {
-  empresa: string;
-  contato: string;
-  cargo: string;
-  telefone: string;
-  whatsapp: string;
-  email: string;
-  site: string;
-  cidade: string;
-  origem: string;
-  servico: string;
-  perfil: string;
-  status: StatusKey;
-  valor: string;
-  proximaAcao: string;
-  dataProx: string;
-}
-
-function emptyForm(): FormState {
+function emptyForm(): NewLeadForm {
   return {
     empresa: "",
     contato: "",
@@ -53,12 +35,12 @@ function emptyForm(): FormState {
     perfil: "Cliente Frio",
     status: "nao_contatado",
     valor: "",
-    proximaAcao: "",
-    dataProx: "",
+    proximaAcao: "Fazer primeiro contato",
+    dataProx: TODAY,
   };
 }
 
-function formFromLead(l: Lead): FormState {
+function formFromLead(l: Lead): NewLeadForm {
   const clean = (v: string) => (v === "—" ? "" : v);
   return {
     empresa: l.empresa,
@@ -124,11 +106,11 @@ function LeadForm({
 }) {
   const { actions } = useCrm();
   const isEdit = editing != null;
-  const [form, setForm] = useState<FormState>(() =>
+  const [form, setForm] = useState<NewLeadForm>(() =>
     editing ? formFromLead(editing) : emptyForm(),
   );
 
-  const set = <K extends keyof FormState>(k: K, v: FormState[K]) =>
+  const set = <K extends keyof NewLeadForm>(k: K, v: NewLeadForm[K]) =>
     setForm((f) => ({ ...f, [k]: v }));
 
   const canSave = form.empresa.trim().length > 0;
@@ -155,16 +137,7 @@ function LeadForm({
       };
       actions.updateLead(editing.id, patch);
     } else {
-      const payload: NewLeadForm = {
-        empresa: form.empresa,
-        contato: form.contato,
-        telefone: form.telefone,
-        cidade: form.cidade,
-        valor: form.valor,
-        origem: form.origem,
-        servico: form.servico,
-      };
-      actions.saveAdd(payload);
+      actions.saveAdd(form);
     }
   };
 
@@ -190,15 +163,13 @@ function LeadForm({
             placeholder="Nome do contato"
           />
         </Field>
-        {isEdit && (
-          <Field label="Cargo">
-            <Input
-              value={form.cargo}
-              onChange={(e) => set("cargo", e.target.value)}
-              placeholder="Cargo"
-            />
-          </Field>
-        )}
+        <Field label="Cargo">
+          <Input
+            value={form.cargo}
+            onChange={(e) => set("cargo", e.target.value)}
+            placeholder="Cargo"
+          />
+        </Field>
         <Field label="Telefone">
           <Input
             value={form.telefone}
@@ -206,31 +177,27 @@ function LeadForm({
             placeholder="(11) 90000-0000"
           />
         </Field>
-        {isEdit && (
-          <>
-            <Field label="WhatsApp">
-              <Input
-                value={form.whatsapp}
-                onChange={(e) => set("whatsapp", e.target.value)}
-                placeholder="(11) 90000-0000"
-              />
-            </Field>
-            <Field label="E-mail">
-              <Input
-                value={form.email}
-                onChange={(e) => set("email", e.target.value)}
-                placeholder="contato@empresa.com.br"
-              />
-            </Field>
-            <Field label="Site">
-              <Input
-                value={form.site}
-                onChange={(e) => set("site", e.target.value)}
-                placeholder="www.empresa.com.br"
-              />
-            </Field>
-          </>
-        )}
+        <Field label="WhatsApp">
+          <Input
+            value={form.whatsapp}
+            onChange={(e) => set("whatsapp", e.target.value)}
+            placeholder="(11) 90000-0000"
+          />
+        </Field>
+        <Field label="E-mail">
+          <Input
+            value={form.email}
+            onChange={(e) => set("email", e.target.value)}
+            placeholder="contato@empresa.com.br"
+          />
+        </Field>
+        <Field label="Site">
+          <Input
+            value={form.site}
+            onChange={(e) => set("site", e.target.value)}
+            placeholder="www.empresa.com.br"
+          />
+        </Field>
         <Field label="Cidade">
           <Input
             value={form.cidade}
@@ -260,48 +227,44 @@ function LeadForm({
             options={SERVICOS}
           />
         </Field>
-        {isEdit && (
-          <>
-            <Field label="Perfil">
-              <SelectField
-                value={form.perfil}
-                onChange={(v) => set("perfil", v)}
-                options={PERFIS}
-              />
-            </Field>
-            <Field label="Status">
-              <Select
-                value={form.status}
-                onValueChange={(v) => set("status", v as StatusKey)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {STATUS.map((s) => (
-                    <SelectItem key={s.key} value={s.key}>
-                      {s.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
-            <Field label="Próxima ação">
-              <Input
-                value={form.proximaAcao}
-                onChange={(e) => set("proximaAcao", e.target.value)}
-                placeholder="Ligar novamente"
-              />
-            </Field>
-            <Field label="Data da próxima ação">
-              <Input
-                type="date"
-                value={form.dataProx}
-                onChange={(e) => set("dataProx", e.target.value)}
-              />
-            </Field>
-          </>
-        )}
+        <Field label="Perfil">
+          <SelectField
+            value={form.perfil}
+            onChange={(v) => set("perfil", v)}
+            options={PERFIS}
+          />
+        </Field>
+        <Field label="Status">
+          <Select
+            value={form.status}
+            onValueChange={(v) => set("status", v as StatusKey)}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {STATUS.map((s) => (
+                <SelectItem key={s.key} value={s.key}>
+                  {s.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
+        <Field label="Próxima ação">
+          <Input
+            value={form.proximaAcao}
+            onChange={(e) => set("proximaAcao", e.target.value)}
+            placeholder="Ligar novamente"
+          />
+        </Field>
+        <Field label="Data da próxima ação">
+          <Input
+            type="date"
+            value={form.dataProx}
+            onChange={(e) => set("dataProx", e.target.value)}
+          />
+        </Field>
       </div>
 
       <div className="flex justify-end gap-2.5 border-t border-border px-4 py-4 sm:px-6">

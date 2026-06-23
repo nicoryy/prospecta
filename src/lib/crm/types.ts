@@ -64,9 +64,17 @@ export interface Lead {
 export interface NewLeadForm {
   empresa: string;
   contato: string;
+  cargo: string;
   telefone: string;
+  whatsapp: string;
+  email: string;
+  site: string;
   cidade: string;
-  valor: string;
   origem: string;
   servico: string;
+  perfil: string;
+  status: StatusKey;
+  valor: string;
+  proximaAcao: string;
+  dataProx: string;
 }
