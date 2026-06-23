@@ -29,7 +29,10 @@ interface State {
   dragOverCol: StatusKey | null;
   done: Record<number, boolean>;
   addOpen: boolean;
+  editId: number | null;
 }
+
+export type LeadPatch = Partial<Omit<Lead, "id" | "timeline" | "arquivos">>;
 
 type Action =
   | { type: "setView"; view: View }
@@ -48,7 +51,13 @@ type Action =
   | { type: "toggleDone"; id: number }
   | { type: "openAdd" }
   | { type: "closeAdd" }
-  | { type: "saveAdd"; form: NewLeadForm };
+  | { type: "saveAdd"; form: NewLeadForm }
+  | { type: "openEdit"; id: number }
+  | { type: "closeEdit" }
+  | { type: "updateLead"; id: number; patch: LeadPatch }
+  | { type: "deleteLead"; id: number }
+  | { type: "clearAll" }
+  | { type: "loadSample" };
 
 function initialView(): View {
   const hash = typeof window !== "undefined" ? window.location.hash.slice(1) : "";
@@ -69,6 +78,7 @@ function initialState(): State {
     dragOverCol: null,
     done: persisted?.done ?? {},
     addOpen: false,
+    editId: null,
   };
 }
 
@@ -197,6 +207,49 @@ function reducer(s: State, a: Action): State {
         view: "kanban",
       };
     }
+    case "openEdit":
+      return { ...s, editId: a.id, addOpen: false };
+    case "closeEdit":
+      return { ...s, editId: null };
+    case "updateLead":
+      return {
+        ...s,
+        editId: null,
+        leads: s.leads.map((l) => (l.id !== a.id ? l : { ...l, ...a.patch })),
+      };
+    case "deleteLead": {
+      const done = { ...s.done };
+      delete done[a.id];
+      return {
+        ...s,
+        leads: s.leads.filter((l) => l.id !== a.id),
+        done,
+        selectedId: s.selectedId === a.id ? null : s.selectedId,
+        editId: s.editId === a.id ? null : s.editId,
+      };
+    }
+    case "clearAll":
+      return {
+        ...s,
+        leads: [],
+        done: {},
+        selectedId: null,
+        editId: null,
+        addOpen: false,
+        activeTag: null,
+        search: "",
+      };
+    case "loadSample":
+      return {
+        ...s,
+        leads: seed(),
+        done: {},
+        selectedId: null,
+        editId: null,
+        addOpen: false,
+        activeTag: null,
+        search: "",
+      };
     default:
       return s;
   }
@@ -223,6 +276,12 @@ interface CrmContextValue {
     openAdd: () => void;
     closeAdd: () => void;
     saveAdd: (form: NewLeadForm) => void;
+    openEdit: (id: number) => void;
+    closeEdit: () => void;
+    updateLead: (id: number, patch: LeadPatch) => void;
+    deleteLead: (id: number) => void;
+    clearAll: () => void;
+    loadSample: () => void;
   };
 }
 
@@ -261,6 +320,12 @@ export function CrmProvider({ children }: { children: ReactNode }) {
         openAdd: () => dispatch({ type: "openAdd" }),
         closeAdd: () => dispatch({ type: "closeAdd" }),
         saveAdd: (form) => dispatch({ type: "saveAdd", form }),
+        openEdit: (id) => dispatch({ type: "openEdit", id }),
+        closeEdit: () => dispatch({ type: "closeEdit" }),
+        updateLead: (id, patch) => dispatch({ type: "updateLead", id, patch }),
+        deleteLead: (id) => dispatch({ type: "deleteLead", id }),
+        clearAll: () => dispatch({ type: "clearAll" }),
+        loadSample: () => dispatch({ type: "loadSample" }),
       },
     };
   }, [state]);

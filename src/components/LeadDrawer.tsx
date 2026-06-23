@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X } from "lucide-react";
+import { Pencil, Trash2, X } from "lucide-react";
 import { useCrm } from "@/store";
 import { cn } from "@/lib/utils";
 import { STATUS, TIPOS } from "@/lib/crm/constants";
@@ -12,6 +12,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import type { DrawerTab, StatusKey } from "@/lib/crm/types";
 
 const TABS: { key: DrawerTab; label: string }[] = [
@@ -57,13 +68,52 @@ export function LeadDrawer() {
                 {lead.contato} · {lead.cargo}
               </div>
             </div>
-            <button
-              onClick={actions.closeLead}
-              className="flex h-8 w-8 flex-none items-center justify-center rounded-lg border border-border bg-background"
-              aria-label="Fechar"
-            >
-              <X className="h-3.5 w-3.5 text-[#6c6c7c]" />
-            </button>
+            <div className="flex flex-none items-center gap-1.5">
+              <button
+                onClick={() => actions.openEdit(lead.id)}
+                className="flex h-8 items-center gap-1.5 rounded-lg border border-border bg-background px-2.5 text-[12px] font-semibold text-[#4c4c58] hover:bg-secondary"
+                aria-label="Editar lead"
+              >
+                <Pencil className="h-3.5 w-3.5" />
+                Editar
+              </button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#f3d4da] bg-[#fdeef0] text-[#e11d48] hover:bg-[#fbdfe4]"
+                    aria-label="Excluir lead"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Excluir lead</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Tem certeza que deseja excluir{" "}
+                      <b className="text-foreground">{lead.empresa}</b>? Esta ação
+                      não pode ser desfeita e todo o histórico será removido.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => actions.deleteLead(lead.id)}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      Excluir
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              <button
+                onClick={actions.closeLead}
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background"
+                aria-label="Fechar"
+              >
+                <X className="h-3.5 w-3.5 text-[#6c6c7c]" />
+              </button>
+            </div>
           </div>
 
           <div className="mt-4 grid grid-cols-3 gap-2.5">

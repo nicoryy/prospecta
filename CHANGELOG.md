@@ -10,6 +10,24 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - **MINOR** — novas funcionalidades retrocompatíveis.
 - **PATCH** — correções retrocompatíveis e ajustes menores.
 
+## [1.2.0] - 2026-06-23
+
+### Adicionado
+
+- **Edição de leads**: botão "Editar" no drawer abre um formulário completo
+  (contato, cargo, telefone, WhatsApp, e-mail, site, cidade, origem, serviço,
+  perfil, status, valor, próxima ação e data).
+- **Exclusão de leads**: botão de excluir no drawer com confirmação (não pode ser
+  desfeito; remove também o histórico).
+- **Menu de dados** (⋮ na barra superior): "Carregar dados de exemplo" e
+  "Limpar todos os dados" (com confirmação).
+
+### Alterado
+
+- `AddLeadModal` virou `LeadFormModal`, compartilhado entre criação e edição.
+
+[1.2.0]: https://semver.org/
+
 ## [1.1.0] - 2026-06-23
 
 ### Adicionado

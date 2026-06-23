@@ -6,7 +6,7 @@ import { Dashboard } from "@/components/views/Dashboard";
 import { Kanban } from "@/components/views/Kanban";
 import { Tarefas } from "@/components/views/Tarefas";
 import { LeadDrawer } from "@/components/LeadDrawer";
-import { AddLeadModal } from "@/components/AddLeadModal";
+import { LeadFormModal } from "@/components/LeadFormModal";
 import { buildTasks } from "@/lib/crm/derive";
 
 export default function App() {
@@ -30,7 +30,7 @@ export default function App() {
       </main>
 
       {state.selectedId != null && <LeadDrawer />}
-      <AddLeadModal />
+      <LeadFormModal />
     </div>
   );
 }

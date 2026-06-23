@@ -23,12 +23,18 @@ implementada em React com componentes [shadcn/ui](https://ui.shadcn.com).
 - **Tarefas do dia** — agenda comercial com ações atrasadas, do dia e follow-up
   automático (3/7/15/30 dias sem resposta).
 - **Página do lead (drawer)** — timeline de interações, dados de contato,
-  anotações livres, arquivos e mudança de status.
+  anotações livres, arquivos, mudança de status, **edição** e **exclusão**.
 - **Novo lead** — cadastro rápido via modal.
+- **Persistência local** — leads e tarefas concluídas são salvos no `localStorage`
+  do navegador automaticamente.
+- **Exportação CSV** — baixe todos os leads em um arquivo `.csv`.
+- **Menu de dados** (⋮ na barra superior) — carregar dados de exemplo ou limpar
+  tudo para começar do zero.
 
-> Os dados são fictícios e residem em memória (sem backend). A "data de hoje"
-> está fixada em `2026-06-23` para manter as datas relativas dos dados de exemplo
-> coerentes — veja `src/lib/crm/constants.ts` (`TODAY`).
+> Os dados residem no navegador (sem backend), persistidos em `localStorage`
+> (chave `prospecta:state:vN`). A "data de hoje" está fixada em `2026-06-23` para
+> manter as datas relativas dos dados de exemplo coerentes — veja
+> `src/lib/crm/constants.ts` (`TODAY`).
 
 ## Como rodar
 
