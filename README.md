@@ -1,3 +1,44 @@
+# Prospecta — Sales-Prospecting CRM
+
+> 🇬🇧 English overview below · 🇧🇷 _Documentação completa em português logo em seguida._
+
+A lightweight, personal CRM for **active sales prospecting** — built for freelance
+software developers who want to organize leads, log every interaction, track
+deals through a pipeline, and make sure no opportunity slips through the cracks.
+It is intentionally simple: no corporate bloat, no cloud account, no cost.
+
+**Highlights**
+
+- **Dashboard** — pipeline value, conversion funnel, loss reasons, stalled leads
+  and performance by lead source.
+- **Kanban funnel** — 8 stages (Not Contacted → Won/Lost) with drag-and-drop and
+  filters by service and lead profile.
+- **Daily tasks** — a commercial agenda with overdue/today actions and automatic
+  follow-up reminders (3 / 7 / 15 / 30 days without a reply).
+- **Lead drawer** — interaction timeline, contact data, free notes, file
+  attachments, status changes, editing and deletion.
+- **Local-first** — leads and tasks live in the browser's `localStorage`; file
+  attachments are stored on disk by a tiny zero-dependency Node server (`server/index.mjs`),
+  so it runs great on a local network with no backend in the cloud.
+- **CSV export** and a **responsive** layout (the sidebar collapses into a
+  slide-in menu on phones/tablets).
+
+**Stack:** Vite · React 18 · TypeScript · Tailwind CSS · shadcn/ui (Radix UI) · lucide-react.
+
+**Quick start**
+
+```bash
+npm install
+npm start   # builds the app and serves it at http://localhost:8787
+```
+
+`npm start` runs the local file server, which serves the built app and accepts
+attachments — reachable from any device on the same network at
+`http://<machine-ip>:8787` (the IP is printed on startup). For development with
+hot reload, run `npm run serve` and `npm run dev` in two terminals.
+
+---
+
 # Prospecta — CRM de prospecção
 
 CRM pessoal voltado para **prospecção ativa** de clientes de desenvolvimento de
