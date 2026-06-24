@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCrm, type LeadPatch } from "@/store";
 import {
   Dialog,
@@ -71,16 +71,38 @@ export function LeadFormModal() {
 
   const close = () => (editing ? actions.closeEdit() : actions.closeAdd());
 
+  // Quando um Select (dropdown) está aberto, o Radix aplica pointer-events:none
+  // no conteúdo do Dialog, então clicar numa área qualquer do modal "atravessa"
+  // e atinge o overlay — alvo idêntico ao de um clique legítimo no backdrop.
+  // O fechamento do Dialog é adiado para o evento "click", mas o Select fecha já
+  // no "pointerdown"; quando o handler do Dialog roda, o dropdown já saiu do DOM.
+  // Por isso capturamos no pointerdown (fase de captura, antes do Radix reagir)
+  // se havia um Select aberto, e consumimos esse sinal no onInteractOutside.
+  const gestureStartedWithSelectOpen = useRef(false);
+  useEffect(() => {
+    const onPointerDownCapture = () => {
+      gestureStartedWithSelectOpen.current = !!document.querySelector(
+        '[data-radix-popper-content-wrapper], [role="listbox"]',
+      );
+    };
+    document.addEventListener("pointerdown", onPointerDownCapture, true);
+    return () =>
+      document.removeEventListener("pointerdown", onPointerDownCapture, true);
+  }, []);
+
   return (
     <Dialog open={open} onOpenChange={(o) => !o && close()}>
       <DialogContent
         className="w-[540px] max-w-[calc(100vw-1.5rem)] gap-0 p-0"
         onInteractOutside={(event) => {
-          // O dropdown do Select é renderizado num portal fora da árvore do
-          // Dialog. Sem isto, clicar numa área do dropdown que não é um item
-          // conta como "clique fora" e fecha o modal, perdendo os dados.
           const target = event.detail.originalEvent.target as HTMLElement | null;
-          if (target?.closest("[data-radix-popper-content-wrapper]")) {
+          // 1) Clique diretamente no dropdown (portal fora da árvore do Dialog).
+          // 2) Gesto que apenas fecha um Select aberto (atinge o overlay).
+          // Em ambos, não fechamos o modal nem perdemos os dados.
+          if (
+            target?.closest("[data-radix-popper-content-wrapper]") ||
+            gestureStartedWithSelectOpen.current
+          ) {
             event.preventDefault();
           }
         }}

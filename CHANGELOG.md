@@ -10,6 +10,20 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - **MINOR** — novas funcionalidades retrocompatíveis.
 - **PATCH** — correções retrocompatíveis e ajustes menores.
 
+## [1.6.1] - 2026-06-24
+
+### Corrigido
+
+- **Modal de lead fechava ao fechar um Select**: com um dropdown (Origem,
+  Serviço, Perfil ou Status) aberto, clicar em qualquer área do modal fora da
+  lista fechava o modal junto, perdendo os dados preenchidos. Causa: enquanto o
+  Select está aberto, o Radix põe `pointer-events: none` no conteúdo do Dialog,
+  então o clique atinge o overlay (alvo idêntico ao de um clique legítimo no
+  backdrop) e o fechamento do Dialog é adiado para o `click`, quando o dropdown
+  já saiu do DOM. Agora capturamos no `pointerdown` (fase de captura) se havia um
+  Select aberto e ignoramos esse gesto no Dialog. Verificado com teste de clique
+  automatizado (CDP): clique no backdrop sem Select aberto continua fechando.
+
 ## [1.6.0] - 2026-06-23
 
 ### Alterado
