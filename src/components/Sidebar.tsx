@@ -147,13 +147,13 @@ function SidebarInner({
 
       <div className="mt-auto flex items-center gap-2.5 border-t border-[#26262f] px-2.5 pb-1 pt-3">
         <div className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-[#2c2c38] text-[13px] font-semibold text-[#cfcfd9]">
-          RT
+          PN
         </div>
         <div className="min-w-0 leading-[1.2]">
           <div className="truncate text-[12.5px] font-semibold text-[#eaeaf0]">
-            Rafael Torres
+            Pedro Nicory
           </div>
-          <div className="text-[11px] text-[#6c6c7c]">Dev freelancer</div>
+          <div className="text-[11px] text-[#6c6c7c]">Dev. FullStack</div>
         </div>
       </div>
     </div>
