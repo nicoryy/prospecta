@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Download,
   Menu,
@@ -7,6 +7,7 @@ import {
   Search,
   Sparkles,
   Trash2,
+  Upload,
 } from "lucide-react";
 import { useCrm } from "@/store";
 import { Button } from "@/components/ui/button";
@@ -29,7 +30,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { fmt } from "@/lib/crm/date";
 import { TODAY } from "@/lib/crm/constants";
-import { downloadLeadsCsv } from "@/lib/crm/csv";
+import { csvToLeads, downloadLeadsCsv } from "@/lib/crm/csv";
 
 const TITLES: Record<string, { title: string; subtitle: string }> = {
   dashboard: {
@@ -50,7 +51,27 @@ export function Topbar({ onOpenNav }: { onOpenNav: () => void }) {
   const { state, actions } = useCrm();
   const { title, subtitle } = TITLES[state.view];
   const [confirmClear, setConfirmClear] = useState(false);
+  const [importResult, setImportResult] = useState<{
+    total: number;
+    imported: number;
+    duplicates: number;
+  } | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const hasLeads = state.leads.length > 0;
+
+  function handleImportFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = reader.result as string;
+      const { leads, totalRows, duplicates } = csvToLeads(text, state.leads);
+      if (leads.length > 0) actions.importLeads(leads);
+      setImportResult({ total: totalRows, imported: leads.length, duplicates });
+      if (fileRef.current) fileRef.current.value = "";
+    };
+    reader.readAsText(file);
+  }
 
   return (
     <header className="flex h-[60px] flex-none items-center gap-2 border-b border-border bg-card px-3 sm:gap-4 sm:px-6">
@@ -80,6 +101,22 @@ export function Topbar({ onOpenNav }: { onOpenNav: () => void }) {
           />
         </div>
 
+        <input
+          ref={fileRef}
+          type="file"
+          accept=".csv"
+          className="hidden"
+          onChange={handleImportFile}
+        />
+        <Button
+          variant="outline"
+          onClick={() => fileRef.current?.click()}
+          title="Importar leads de um arquivo CSV"
+          className="hidden h-9 gap-[7px] px-3 text-[13px] md:inline-flex"
+        >
+          <Upload className="h-[14px] w-[14px]" strokeWidth={2} />
+          Importar
+        </Button>
         <Button
           variant="outline"
           onClick={() => downloadLeadsCsv(state.leads)}
@@ -111,6 +148,13 @@ export function Topbar({ onOpenNav }: { onOpenNav: () => void }) {
             >
               <Download className="text-muted-foreground" />
               Exportar CSV
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="md:hidden"
+              onSelect={() => fileRef.current?.click()}
+            >
+              <Upload className="text-muted-foreground" />
+              Importar CSV
             </DropdownMenuItem>
             <DropdownMenuSeparator className="md:hidden" />
             <DropdownMenuItem onSelect={() => actions.loadSample()}>
@@ -159,6 +203,34 @@ export function Topbar({ onOpenNav }: { onOpenNav: () => void }) {
             >
               Limpar tudo
             </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={importResult !== null} onOpenChange={() => setImportResult(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Importação concluída</AlertDialogTitle>
+            <AlertDialogDescription>
+              {importResult && importResult.imported > 0 ? (
+                <>
+                  <b className="text-foreground">{importResult.imported}</b> lead(s)
+                  importado(s) com sucesso.
+                  {importResult.duplicates > 0 && (
+                    <>
+                      {" "}
+                      <b className="text-foreground">{importResult.duplicates}</b>{" "}
+                      duplicata(s) ignorada(s).
+                    </>
+                  )}
+                </>
+              ) : (
+                "Nenhum novo lead para importar. Todos os registros do CSV já existem."
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction>OK</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

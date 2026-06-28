@@ -59,6 +59,7 @@ type Action =
   | { type: "deleteLead"; id: number }
   | { type: "clearAll" }
   | { type: "loadSample" }
+  | { type: "importLeads"; leads: Lead[] }
   | { type: "addArquivo"; id: number; arquivo: Arquivo }
   | { type: "removeArquivo"; id: number; arquivoId: string };
 
@@ -255,6 +256,8 @@ function reducer(s: State, a: Action): State {
         activeTag: null,
         search: "",
       };
+    case "importLeads":
+      return { ...s, leads: [...a.leads, ...s.leads] };
     case "addArquivo":
       return {
         ...s,
@@ -303,6 +306,7 @@ interface CrmContextValue {
     deleteLead: (id: number) => void;
     clearAll: () => void;
     loadSample: () => void;
+    importLeads: (leads: Lead[]) => void;
     addArquivo: (id: number, arquivo: Arquivo) => void;
     removeArquivo: (id: number, arquivoId: string) => void;
   };
@@ -347,9 +351,10 @@ export function CrmProvider({ children }: { children: ReactNode }) {
         closeEdit: () => dispatch({ type: "closeEdit" }),
         updateLead: (id, patch) => dispatch({ type: "updateLead", id, patch }),
         deleteLead: (id) => dispatch({ type: "deleteLead", id }),
-        clearAll: () => dispatch({ type: "clearAll" }),
-        loadSample: () => dispatch({ type: "loadSample" }),
-        addArquivo: (id, arquivo) => dispatch({ type: "addArquivo", id, arquivo }),
+    clearAll: () => dispatch({ type: "clearAll" }),
+    loadSample: () => dispatch({ type: "loadSample" }),
+    importLeads: (leads) => dispatch({ type: "importLeads", leads }),
+    addArquivo: (id, arquivo) => dispatch({ type: "addArquivo", id, arquivo }),
         removeArquivo: (id, arquivoId) =>
           dispatch({ type: "removeArquivo", id, arquivoId }),
       },
